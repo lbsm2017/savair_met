@@ -2,11 +2,10 @@
 
 WITH source_data AS (
     SELECT
-        CAST("Vintage Year" AS INT) AS vintage_year,
-        "Asset Class Group" AS asset_class,
-        "First Transaction Period" AS first_transaction_period,
-        CAST("As of Date" AS DATE) AS as_of_date,
-        geo_region,
+        CAST(vintage_year AS INT) AS vintage_year,
+        asset_class AS asset_class,
+        first_transaction_period AS first_transaction_period,
+        CAST(as_of_date AS DATE) AS as_of_date,
         CAST(fund_count AS FLOAT) AS fund_count,
         CAST(irr_pooled AS FLOAT) AS irr_pooled,
         CAST(irr_equal_weighted AS FLOAT) AS irr_equal_weighted,
@@ -35,8 +34,9 @@ WITH source_data AS (
         CAST(dpi_median AS FLOAT) AS dpi_median,
         CAST(dpi_lower_quartile AS FLOAT) AS dpi_lower_quartile,
         CAST(dpi_bottom_5 AS FLOAT) AS dpi_bottom_5,
-        CAST(dpi_std_dev AS FLOAT) AS dpi_std_dev
-    FROM {{ source('my_database', 'pe_returns') }}
+        CAST(dpi_std_dev AS FLOAT) AS dpi_std_dev,
+        geo_region AS geo_region
+    FROM {{ source('postgres', 'pe_returns') }}
 )
 
 SELECT * FROM source_data
