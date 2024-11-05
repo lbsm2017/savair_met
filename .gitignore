@@ -51,6 +51,9 @@ coverage.xml
 .pytest_cache/
 cover/
 
+# Ignore secrets file
+.secrets
+
 # Translations
 *.mo
 *.pot
@@ -167,3 +170,4 @@ target/
 dbt_packages/
 logs/
 # end dbt Cloud content
+
