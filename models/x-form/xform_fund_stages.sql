@@ -1,4 +1,4 @@
--- models/x-form/xform_fund_stages.sql
+-- models/fund_stage_classification.sql
 
 WITH xform_data AS (
     SELECT
@@ -45,46 +45,46 @@ SELECT
     
     CASE
         -- Buyout & Growth Equity
-        WHEN asset_class = 'Buyout & Growth Equity' AND fund_age <= 3 THEN 'Commitment'
-        WHEN asset_class = 'Buyout & Growth Equity' AND fund_age BETWEEN 4 AND 6 THEN 'Growth'
-        WHEN asset_class = 'Buyout & Growth Equity' AND fund_age BETWEEN 7 AND 10 THEN 'Maturity'
-        WHEN asset_class = 'Buyout & Growth Equity' AND fund_age > 10 THEN 'Wind-Down'
+        WHEN asset_class = 'Buyout & Growth Equity' AND fund_age <= 3.0 THEN 'Contribution'
+        WHEN asset_class = 'Buyout & Growth Equity' AND fund_age > 3.0 AND fund_age <= 6.0 THEN 'Growth'
+        WHEN asset_class = 'Buyout & Growth Equity' AND fund_age > 6.0 AND fund_age <= 10.0 THEN 'Distribution'
+        WHEN asset_class = 'Buyout & Growth Equity' AND fund_age > 10.0 THEN 'Liquidation'
 
         -- Venture Capital
-        WHEN asset_class = 'Venture Capital' AND fund_age <= 5 THEN 'Commitment'
-        WHEN asset_class = 'Venture Capital' AND fund_age BETWEEN 6 AND 8 THEN 'Growth'
-        WHEN asset_class = 'Venture Capital' AND fund_age BETWEEN 9 AND 12 THEN 'Distribution'
-        WHEN asset_class = 'Venture Capital' AND fund_age > 12 THEN 'Wind-Down'
+        WHEN asset_class = 'Venture Capital' AND fund_age <= 5.0 THEN 'Contribution'
+        WHEN asset_class = 'Venture Capital' AND fund_age > 5.0 AND fund_age <= 8.0 THEN 'Growth'
+        WHEN asset_class = 'Venture Capital' AND fund_age > 8.0 AND fund_age <= 12.0 THEN 'Distribution'
+        WHEN asset_class = 'Venture Capital' AND fund_age > 12.0 THEN 'Liquidation'
 
         -- Real Estate
-        WHEN asset_class = 'Real Estate' AND fund_age <= 2 THEN 'Commitment'
-        WHEN asset_class = 'Real Estate' AND fund_age BETWEEN 3 AND 5 THEN 'Growth'
-        WHEN asset_class = 'Real Estate' AND fund_age BETWEEN 6 AND 10 THEN 'Maturity'
-        WHEN asset_class = 'Real Estate' AND fund_age > 10 THEN 'Distribution'
+        WHEN asset_class = 'Real Estate' AND fund_age <= 2.0 THEN 'Contribution'
+        WHEN asset_class = 'Real Estate' AND fund_age > 2.0 AND fund_age <= 5.0 THEN 'Growth'
+        WHEN asset_class = 'Real Estate' AND fund_age > 5.0 AND fund_age <= 10.0 THEN 'Distribution'
+        WHEN asset_class = 'Real Estate' AND fund_age > 10.0 THEN 'Liquidation'
 
         -- Infrastructure
-        WHEN asset_class = 'Infrastructure' AND fund_age <= 4 THEN 'Commitment'
-        WHEN asset_class = 'Infrastructure' AND fund_age BETWEEN 5 AND 10 THEN 'Growth'
-        WHEN asset_class = 'Infrastructure' AND fund_age BETWEEN 11 AND 15 THEN 'Maturity'
-        WHEN asset_class = 'Infrastructure' AND fund_age > 15 THEN 'Wind-Down'
+        WHEN asset_class = 'Infrastructure' AND fund_age <= 4.0 THEN 'Contribution'
+        WHEN asset_class = 'Infrastructure' AND fund_age > 4.0 AND fund_age <= 10.0 THEN 'Growth'
+        WHEN asset_class = 'Infrastructure' AND fund_age > 10.0 AND fund_age <= 15.0 THEN 'Distribution'
+        WHEN asset_class = 'Infrastructure' AND fund_age > 15.0 THEN 'Liquidation'
 
         -- Natural Resources
-        WHEN asset_class = 'Natural Resources' AND fund_age <= 4 THEN 'Commitment'
-        WHEN asset_class = 'Natural Resources' AND fund_age BETWEEN 5 AND 9 THEN 'Growth'
-        WHEN asset_class = 'Natural Resources' AND fund_age BETWEEN 10 AND 15 THEN 'Maturity'
-        WHEN asset_class = 'Natural Resources' AND fund_age > 15 THEN 'Wind-Down'
+        WHEN asset_class = 'Natural Resources' AND fund_age <= 4.0 THEN 'Contribution'
+        WHEN asset_class = 'Natural Resources' AND fund_age > 4.0 AND fund_age <= 9.0 THEN 'Growth'
+        WHEN asset_class = 'Natural Resources' AND fund_age > 9.0 AND fund_age <= 15.0 THEN 'Distribution'
+        WHEN asset_class = 'Natural Resources' AND fund_age > 15.0 THEN 'Liquidation'
 
         -- Subordinated Capital & Distressed
-        WHEN asset_class = 'Subordinated Capital & Distressed' AND fund_age <= 3 THEN 'Commitment'
-        WHEN asset_class = 'Subordinated Capital & Distressed' AND fund_age BETWEEN 4 AND 7 THEN 'Growth'
-        WHEN asset_class = 'Subordinated Capital & Distressed' AND fund_age BETWEEN 8 AND 12 THEN 'Maturity'
-        WHEN asset_class = 'Subordinated Capital & Distressed' AND fund_age > 12 THEN 'Wind-Down'
+        WHEN asset_class = 'Subordinated Capital & Distressed' AND fund_age <= 3.0 THEN 'Contribution'
+        WHEN asset_class = 'Subordinated Capital & Distressed' AND fund_age > 3.0 AND fund_age <= 7.0 THEN 'Growth'
+        WHEN asset_class = 'Subordinated Capital & Distressed' AND fund_age > 7.0 AND fund_age <= 12.0 THEN 'Distribution'
+        WHEN asset_class = 'Subordinated Capital & Distressed' AND fund_age > 12.0 THEN 'Liquidation'
 
         -- Fund of Funds & Secondary Funds
-        WHEN asset_class = 'Fund of Funds & Secondary Funds' AND fund_age <= 3 THEN 'Commitment'
-        WHEN asset_class = 'Fund of Funds & Secondary Funds' AND fund_age BETWEEN 4 AND 7 THEN 'Growth'
-        WHEN asset_class = 'Fund of Funds & Secondary Funds' AND fund_age BETWEEN 8 AND 12 THEN 'Maturity'
-        WHEN asset_class = 'Fund of Funds & Secondary Funds' AND fund_age > 12 THEN 'Wind-Down'
+        WHEN asset_class = 'Fund of Funds & Secondary Funds' AND fund_age <= 3.0 THEN 'Contribution'
+        WHEN asset_class = 'Fund of Funds & Secondary Funds' AND fund_age > 3.0 AND fund_age <= 7.0 THEN 'Growth'
+        WHEN asset_class = 'Fund of Funds & Secondary Funds' AND fund_age > 7.0 AND fund_age <= 12.0 THEN 'Distribution'
+        WHEN asset_class = 'Fund of Funds & Secondary Funds' AND fund_age > 12.0 THEN 'Liquidation'
 
         -- Undefined for any other asset classes
         ELSE 'Undefined'
