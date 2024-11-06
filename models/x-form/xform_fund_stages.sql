@@ -34,61 +34,22 @@ merged_data AS (
     AND xform_data.asset_class = performance_data.asset_class
     AND xform_data.geo_region = performance_data.geo_region
     AND xform_data.as_of_date = performance_data.as_of_date
+),
+
+-- Join merged_data with base_fund_stage_criteria to dynamically assign fund_stage
+staged_data AS (
+    SELECT
+        md.vintage_year,
+        md.asset_class,
+        md.geo_region,
+        md.as_of_date,
+        md.fund_age,
+        COALESCE(fsc.fund_stage, 'Undefined') AS fund_stage
+    FROM merged_data md
+    LEFT JOIN {{ ref('base_fund_stage_criteria') }} fsc
+    ON md.asset_class = fsc.asset_class
+    AND md.fund_age >= fsc.min_fund_age
+    AND (md.fund_age <= fsc.max_fund_age OR fsc.max_fund_age IS NULL)
 )
 
-SELECT
-    vintage_year,
-    asset_class,
-    geo_region,
-    as_of_date,
-    fund_age,
-    
-    CASE
-        -- Buyout & Growth Equity
-        WHEN asset_class = 'Buyout & Growth Equity' AND fund_age <= 3.0 THEN 'Contribution'
-        WHEN asset_class = 'Buyout & Growth Equity' AND fund_age > 3.0 AND fund_age <= 6.0 THEN 'Growth'
-        WHEN asset_class = 'Buyout & Growth Equity' AND fund_age > 6.0 AND fund_age <= 10.0 THEN 'Distribution'
-        WHEN asset_class = 'Buyout & Growth Equity' AND fund_age > 10.0 THEN 'Liquidation'
-
-        -- Venture Capital
-        WHEN asset_class = 'Venture Capital' AND fund_age <= 5.0 THEN 'Contribution'
-        WHEN asset_class = 'Venture Capital' AND fund_age > 5.0 AND fund_age <= 8.0 THEN 'Growth'
-        WHEN asset_class = 'Venture Capital' AND fund_age > 8.0 AND fund_age <= 12.0 THEN 'Distribution'
-        WHEN asset_class = 'Venture Capital' AND fund_age > 12.0 THEN 'Liquidation'
-
-        -- Real Estate
-        WHEN asset_class = 'Real Estate' AND fund_age <= 2.0 THEN 'Contribution'
-        WHEN asset_class = 'Real Estate' AND fund_age > 2.0 AND fund_age <= 5.0 THEN 'Growth'
-        WHEN asset_class = 'Real Estate' AND fund_age > 5.0 AND fund_age <= 10.0 THEN 'Distribution'
-        WHEN asset_class = 'Real Estate' AND fund_age > 10.0 THEN 'Liquidation'
-
-        -- Infrastructure
-        WHEN asset_class = 'Infrastructure' AND fund_age <= 4.0 THEN 'Contribution'
-        WHEN asset_class = 'Infrastructure' AND fund_age > 4.0 AND fund_age <= 10.0 THEN 'Growth'
-        WHEN asset_class = 'Infrastructure' AND fund_age > 10.0 AND fund_age <= 15.0 THEN 'Distribution'
-        WHEN asset_class = 'Infrastructure' AND fund_age > 15.0 THEN 'Liquidation'
-
-        -- Natural Resources
-        WHEN asset_class = 'Natural Resources' AND fund_age <= 4.0 THEN 'Contribution'
-        WHEN asset_class = 'Natural Resources' AND fund_age > 4.0 AND fund_age <= 9.0 THEN 'Growth'
-        WHEN asset_class = 'Natural Resources' AND fund_age > 9.0 AND fund_age <= 15.0 THEN 'Distribution'
-        WHEN asset_class = 'Natural Resources' AND fund_age > 15.0 THEN 'Liquidation'
-
-        -- Subordinated Capital & Distressed
-        WHEN asset_class = 'Subordinated Capital & Distressed' AND fund_age <= 3.0 THEN 'Contribution'
-        WHEN asset_class = 'Subordinated Capital & Distressed' AND fund_age > 3.0 AND fund_age <= 7.0 THEN 'Growth'
-        WHEN asset_class = 'Subordinated Capital & Distressed' AND fund_age > 7.0 AND fund_age <= 12.0 THEN 'Distribution'
-        WHEN asset_class = 'Subordinated Capital & Distressed' AND fund_age > 12.0 THEN 'Liquidation'
-
-        -- Fund of Funds & Secondary Funds
-        WHEN asset_class = 'Fund of Funds & Secondary Funds' AND fund_age <= 3.0 THEN 'Contribution'
-        WHEN asset_class = 'Fund of Funds & Secondary Funds' AND fund_age > 3.0 AND fund_age <= 7.0 THEN 'Growth'
-        WHEN asset_class = 'Fund of Funds & Secondary Funds' AND fund_age > 7.0 AND fund_age <= 12.0 THEN 'Distribution'
-        WHEN asset_class = 'Fund of Funds & Secondary Funds' AND fund_age > 12.0 THEN 'Liquidation'
-
-        -- Undefined for any other asset classes
-        ELSE 'Undefined'
-    END AS fund_stage
-
-FROM
-    merged_data
+SELECT * FROM staged_data
