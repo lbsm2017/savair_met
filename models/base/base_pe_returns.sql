@@ -4,6 +4,7 @@ WITH source_data AS (
     SELECT
         CAST(vintage_year AS INT) AS vintage_year,
         asset_class AS asset_class,
+        geo_region AS geo_region,
         first_transaction_period AS first_transaction_period,
         CAST(as_of_date AS DATE) AS as_of_date,
         CAST(fund_count AS FLOAT) AS fund_count,
@@ -34,8 +35,7 @@ WITH source_data AS (
         CAST(dpi_median AS FLOAT) AS dpi_median,
         CAST(dpi_lower_quartile AS FLOAT) AS dpi_lower_quartile,
         CAST(dpi_bottom_5 AS FLOAT) AS dpi_bottom_5,
-        CAST(dpi_std_dev AS FLOAT) AS dpi_std_dev,
-        geo_region AS geo_region
+        CAST(dpi_std_dev AS FLOAT) AS dpi_std_dev
     FROM {{ source('postgres', 'pe_returns') }}
 )
 
