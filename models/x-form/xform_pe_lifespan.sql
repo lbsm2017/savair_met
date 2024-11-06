@@ -5,6 +5,7 @@ WITH base_data AS (
         CAST(vintage_year AS INT) AS vintage_year,
         asset_class,
         first_transaction_period,
+        geo_region,
         CAST(as_of_date AS DATE) AS as_of_date
     FROM {{ ref('base_pe_returns') }}
 ),
@@ -41,6 +42,7 @@ computed_data AS (
 SELECT
     vintage_year,
     asset_class,
+    geo_region,
     first_transaction_period,
     as_of_date,
     transaction_year_decimal,
