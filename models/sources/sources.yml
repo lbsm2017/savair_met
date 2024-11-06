@@ -6,3 +6,4 @@ sources:
     tables:
       - name: pe_returns
       - name: fund_stage_criteria
+      - name: capital_call_schedule
