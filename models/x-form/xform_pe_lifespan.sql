@@ -35,7 +35,7 @@ computed_data AS (
                 EXTRACT(YEAR FROM as_of_date) + (EXTRACT(DOY FROM as_of_date) / 365.25) 
                 - (transaction_year + transaction_quarter) AS NUMERIC
             ), 2
-        ) AS years_difference
+        ) AS fund_age
     FROM transformed_data
 )
 
@@ -46,5 +46,5 @@ SELECT
     first_transaction_period,
     as_of_date,
     transaction_year_decimal,
-    years_difference
+    fund_age
 FROM computed_data
