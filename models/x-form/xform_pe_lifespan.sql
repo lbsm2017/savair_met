@@ -1,6 +1,5 @@
 -- models/x-forms/xform_pe_lifespan.sql
 
-
 WITH base_data AS (
     SELECT
         CAST(vintage_year AS INT) AS vintage_year,
@@ -19,7 +18,7 @@ transformed_data AS (
             WHEN RIGHT(first_transaction_period, 2) = 'Q2' THEN 0.50
             WHEN RIGHT(first_transaction_period, 2) = 'Q3' THEN 0.75
             WHEN RIGHT(first_transaction_period, 2) = 'Q4' THEN 1.00
-            ELSE 0.0  -- Default fallback, though we expect only Q1 to Q4
+            ELSE 0.0  -- Fallback if quarters are non-standard
         END AS transaction_quarter
     FROM base_data
 ),
@@ -29,9 +28,13 @@ computed_data AS (
         -- Combine transaction year and quarter to form the decimal year
         transaction_year + transaction_quarter AS transaction_year_decimal,
 
-        -- Compute the years difference between `transaction_year_decimal` and `as_of_date`
-        EXTRACT(YEAR FROM as_of_date) + (EXTRACT(DOY FROM as_of_date) / 365.25) 
-            - (transaction_year + transaction_quarter) AS years_difference
+        -- Compute the years difference and round to two decimal places
+        ROUND(
+            CAST(
+                EXTRACT(YEAR FROM as_of_date) + (EXTRACT(DOY FROM as_of_date) / 365.25) 
+                - (transaction_year + transaction_quarter) AS NUMERIC
+            ), 2
+        ) AS years_difference
     FROM transformed_data
 )
 
