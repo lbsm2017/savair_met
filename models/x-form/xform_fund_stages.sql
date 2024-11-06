@@ -8,7 +8,7 @@ WITH xform_data AS (
         first_transaction_period,
         as_of_date,
         transaction_year_decimal,
-        years_difference AS fund_age
+        fund_age
     FROM {{ ref('xform_pe_lifespan') }}
 ),
 
