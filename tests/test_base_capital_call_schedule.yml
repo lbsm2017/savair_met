@@ -10,7 +10,7 @@ models:
         tests:
           - not_null
 
-      - name: geo_area
+      - name: geo_region
         description: "Geographic area of the investment"
         tests:
           - not_null
