@@ -1,7 +1,7 @@
 version: 2
 
 models:
-  - name: base_fund_stage_criteria
+  - name: base_pe_stage_criteria
     description: "Base model for fund stage criteria"
 
     columns:

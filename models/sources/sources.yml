@@ -4,6 +4,6 @@ sources:
   - name: postgres
     schema: public
     tables:
+      - name: pe_capital_call_schedule
       - name: pe_returns
-      - name: fund_stage_criteria
-      - name: capital_call_schedule
+      - name: pe_stage_criteria

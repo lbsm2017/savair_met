@@ -1,7 +1,7 @@
 version: 2
 
 models:
-  - name: base_capital_call_schedule
+  - name: base_pe_capital_call_schedule
     description: "Base model for capital call schedule"
 
     columns:
