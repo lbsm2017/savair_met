@@ -1,4 +1,4 @@
--- models/x-forms/xform_pe_lifespan.sql
+-- models\marts\pe_lifespan.sql
 
 WITH base_data AS (
     SELECT

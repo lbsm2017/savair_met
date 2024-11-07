@@ -1,0 +1,33 @@
+version: 2
+
+models:
+  - name: base_pe_capital_call_schedule
+    description: "Base model for capital call schedule"
+
+    columns:
+      - name: asset_class
+        description: "Asset class category"
+        tests:
+          - not_null
+
+      - name: geo_area
+        description: "Geographic area of the investment"
+        tests:
+          - not_null
+
+      - name: call_year
+        description: "Year of the capital call"
+        tests:
+          - dbt_utils.accepted_range:
+              min_value: 0
+              max_value: 100
+              inclusive: true
+
+      - name: call_value
+        description: "Value of the capital call"
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              min_value: 0
+              max_value: 1
+              inclusive: true
