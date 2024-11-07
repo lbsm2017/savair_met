@@ -1,0 +1,32 @@
+version: 2
+
+models:
+  - name: base_fund_stage_criteria
+    description: "Base model for fund stage criteria"
+
+    columns:
+      - name: asset_class
+        description: "Asset class category"
+        tests:
+          - not_null
+
+      - name: min_fund_age
+        description: "Minimum age of funds for this stage criteria"
+        tests:
+          - dbt_utils.accepted_range:
+              min_value: 0
+              inclusive: true
+
+      - name: max_fund_age
+        description: "Maximum age of funds for this stage criteria"
+        tests:
+          - dbt_utils.accepted_range:
+              min_value: 1
+              inclusive: true
+          - dbt_utils.expression_is_true:
+              expression: ">= min_fund_age"  # Ensures max_fund_age is not less than min_fund_age
+
+      - name: fund_stage
+        description: "Stage of the fund based on age and other criteria"
+        tests:
+          - not_null

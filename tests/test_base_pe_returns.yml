@@ -1,0 +1,44 @@
+version: 2
+
+models:
+  - name: base_pe_returns
+    description: "Base model for private equity returns"
+
+    columns:
+      - name: vintage_year
+        description: "Vintage year of the investment"
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              min_value: 1900
+              inclusive: true
+
+      - name: asset_class
+        description: "Asset class category"
+        tests:
+          - not_null
+
+      - name: geo_region
+        description: "Geographic region of the investment"
+        tests:
+          - not_null
+
+      - name: first_transaction_period
+        description: "First transaction period of the investment"
+        tests:
+          - not_null
+
+      - name: as_of_date
+        description: "As of date for the data record"
+        tests:
+          - not_null
+
+      - name: fund_count
+        description: "Number of funds in the data set"
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              min_value: 1
+              inclusive: true
+
+
