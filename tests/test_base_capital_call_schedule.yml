@@ -15,7 +15,7 @@ models:
         tests:
           - not_null
 
-      - name: year
+      - name: call_year
         description: "Year of the capital call"
         tests:
           - dbt_utils.accepted_range:
